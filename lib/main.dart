@@ -9,7 +9,7 @@ class Lograph extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: Signin.id,
+      initialRoute: Signup.id,
       routes: {
         Signin.id: (context) => Signin(),
         Signup.id: (context) => Signup(),
