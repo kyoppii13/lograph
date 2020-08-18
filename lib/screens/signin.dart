@@ -25,10 +25,10 @@ class _SigninState extends State<Signin> {
         title: Text(widget.title),
         backgroundColor: Colors.blue,
       ),
-      body: Padding(
-        padding: EdgeInsets.all(24),
-        child: ModalProgressHUD(
-          inAsyncCall: isShowSpinner,
+      body: ModalProgressHUD(
+        inAsyncCall: isShowSpinner,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
