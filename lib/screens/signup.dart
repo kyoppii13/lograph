@@ -94,7 +94,8 @@ class _SignupState extends State<Signup> {
                           await _auth.createUserWithEmailAndPassword(
                               email: email, password: password);
                       if (newUser != null) {
-                        Navigator.pushNamed(context, CategoryList.id);
+                        Navigator.pushReplacementNamed(
+                            context, CategoryList.id);
                       }
                       setState(() {
                         isShowSpinner = false;

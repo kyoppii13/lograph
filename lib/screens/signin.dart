@@ -4,6 +4,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:lograph/common/constants.dart';
 import 'package:lograph/common/rounded_button.dart';
 import 'package:lograph/screens/category_list.dart';
+import 'package:lograph/screens/signup.dart';
 
 class Signin extends StatefulWidget {
   static const String id = 'signin';
@@ -81,7 +82,9 @@ class _SigninState extends State<Signin> {
                     final user = await _auth.signInWithEmailAndPassword(
                         email: email, password: password);
                     if (user != null) {
-                      Navigator.pushNamed(context, CategoryList.id);
+                      Navigator.popUntil(
+                          context, ModalRoute.withName(Signup.id));
+                      Navigator.pushReplacementNamed(context, CategoryList.id);
                     }
                     setState(() {
                       isShowSpinner = false;
