@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lograph/screens/log_list.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:lograph/common/constants.dart';
 import 'package:lograph/common/rounded_button.dart';
@@ -84,7 +85,7 @@ class _SigninState extends State<Signin> {
                     if (user != null) {
                       Navigator.popUntil(
                           context, ModalRoute.withName(Signup.id));
-                      Navigator.pushReplacementNamed(context, CategoryList.id);
+                      Navigator.pushReplacementNamed(context, LogList.id);
                     }
                     setState(() {
                       isShowSpinner = false;

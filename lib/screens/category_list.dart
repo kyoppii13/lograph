@@ -8,7 +8,7 @@ FirebaseUser loggedInUser;
 
 class CategoryList extends StatefulWidget {
   static const String id = 'category_list';
-  final String title = 'ホーム';
+  final String title = 'グラフ一覧';
   @override
   _CategoryListState createState() => _CategoryListState();
 }
@@ -33,47 +33,11 @@ class _CategoryListState extends State<CategoryList> {
     }
   }
 
-  void getLogs() async {
-    final logs = await _firestore.collection('logs').getDocuments();
-    for (final log in logs.documents) {}
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        backgroundColor: Colors.blue,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            color: Colors.white,
-            onPressed: () => {},
-          )
-        ],
-      ),
-      body: SafeArea(
-        child: ListView(
-          children: [
-            Text('AAA'),
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(MdiIcons.formatListBulleted),
-            title: Text('ログ一覧'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(MdiIcons.chartLine),
-            title: Text('グラフ一覧'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(MdiIcons.account),
-            title: Text('プロフィール'),
-          ),
-        ],
+    return Container(
+      child: SafeArea(
+        child: Text('Graph'),
       ),
     );
   }
