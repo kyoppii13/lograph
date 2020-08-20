@@ -145,37 +145,15 @@ class GetLogs extends StatelessWidget {
                   value: '50kg',
                   category: '体重',
                   icon: Icon(
-                    MdiIcons.armFlex,
+                    MdiIcons.armFlexOutline,
                     size: 36,
                   ),
                 );
               }
             },
           );
-          // final logs = snapshot.data.documents;
-          // List logsList = [];
-          // for (var log in logs) {
-          //   final logText = log.data['text'];
-          //
         }
       },
     );
   }
-
-  // Widget _logItem(String date, String title) {
-  //   return Container(
-  //       decoration: new BoxDecoration(
-  //         border: new Border(
-  //           bottom: BorderSide(
-  //             width: 1,
-  //             color: Colors.blueGrey,
-  //           ),
-  //         ),
-  //       ),
-  //       child: ListTile(
-  //         title: Text(date),
-  //         subtitle: Text(title),
-  //         onTap: () => {Navigator.pushNamed(context, LogDetail.id)},
-  //       ));
-  // }
 }

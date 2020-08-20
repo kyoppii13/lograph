@@ -14,6 +14,9 @@ class ListItem extends StatelessWidget {
     var formatter = DateFormat('y/MM/dd HH:mm');
     return Card(
       elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(2)),
+      ),
       child: ListTile(
         title: Text(formatter.format(date)),
         subtitle: Text(
