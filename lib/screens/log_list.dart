@@ -6,6 +6,7 @@ import 'package:lograph/screens/log_input.dart';
 import 'package:lograph/screens/category_input.dart';
 import 'package:lograph/screens/user_profile.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:lograph/common/list_item.dart';
 
 final _firestore = Firestore.instance;
 FirebaseUser loggedInUser;
@@ -41,11 +42,7 @@ class _LogListState extends State<LogList> {
   String _title = 'ログ一覧';
   String _appBarAction = LogInput.id;
   static List<Widget> _screenList = [
-    Container(
-      child: Center(
-        child: Text('aaa'),
-      ),
-    ),
+    LogListBody(),
     CategoryList(),
     UserProfile(),
   ];
@@ -116,6 +113,15 @@ class _LogListState extends State<LogList> {
   }
 }
 
+class LogListBody extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: GetLogs(),
+    );
+  }
+}
+
 class GetLogs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -130,18 +136,46 @@ class GetLogs extends StatelessWidget {
           );
         }
         if (snapshot.connectionState == ConnectionState.done) {
-          return Expanded(
-            child: ListView(
-              children: [Text('AAA')],
-            ),
+          return ListView.builder(
+            padding: EdgeInsets.all(10),
+            itemBuilder: (BuildContext context, int index) {
+              if (index < 10) {
+                return ListItem(
+                  date: DateTime.now(),
+                  value: '50kg',
+                  category: '体重',
+                  icon: Icon(
+                    MdiIcons.armFlex,
+                    size: 36,
+                  ),
+                );
+              }
+            },
           );
           // final logs = snapshot.data.documents;
           // List logsList = [];
           // for (var log in logs) {
           //   final logText = log.data['text'];
-          // }
+          //
         }
       },
     );
   }
+
+  // Widget _logItem(String date, String title) {
+  //   return Container(
+  //       decoration: new BoxDecoration(
+  //         border: new Border(
+  //           bottom: BorderSide(
+  //             width: 1,
+  //             color: Colors.blueGrey,
+  //           ),
+  //         ),
+  //       ),
+  //       child: ListTile(
+  //         title: Text(date),
+  //         subtitle: Text(title),
+  //         onTap: () => {Navigator.pushNamed(context, LogDetail.id)},
+  //       ));
+  // }
 }
