@@ -11,7 +11,7 @@ class ListItem extends StatelessWidget {
   final Icon icon;
   @override
   Widget build(BuildContext context) {
-    var formatter = DateFormat('y/MM/dd HH:mm:ss');
+    var formatter = DateFormat('y/MM/dd HH:mm');
     return Card(
       elevation: 2,
       child: ListTile(
