@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lograph/common/constants.dart';
 import 'package:lograph/common/rounded_button.dart';
-import 'package:lograph/screens/category_list.dart';
+import 'package:lograph/screens/log_list.dart';
 import 'package:lograph/screens/signin.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
@@ -52,7 +52,7 @@ class _SignupState extends State<Signup> {
     //     .catchError(
     //       (error) => print(error),
     //     );
-    super.initState();
+    // super.initState();
   }
 
   @override
@@ -128,20 +128,25 @@ class _SignupState extends State<Signup> {
                       setState(() {
                         isShowSpinner = true;
                       });
-                      try {
-                        final newUser =
-                            await _auth.createUserWithEmailAndPassword(
-                                email: email, password: password);
-                        if (newUser != null) {
-                          Navigator.pushReplacementNamed(
-                              context, CategoryList.id);
-                        }
-                        setState(() {
-                          isShowSpinner = false;
-                        });
-                      } catch (e) {
-                        print(e);
-                      }
+                      await _auth
+                          .createUserWithEmailAndPassword(
+                              email: email, password: password)
+                          .then((AuthResult currentUser) => _store
+                              .collection("users")
+                              .document(currentUser.user.uid)
+                              .setData({
+                                "uid": currentUser.user.uid,
+                                "email": email,
+                              })
+                              .then((result) => {
+                                    Navigator.pushReplacementNamed(
+                                        context, LogList.id),
+                                    setState(() {
+                                      isShowSpinner = false;
+                                    })
+                                  })
+                              .catchError((error) => print(error)))
+                          .catchError((error) => print(error));
                     }
                   },
                 ),
