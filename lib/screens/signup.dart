@@ -105,48 +105,49 @@ class _SignupState extends State<Signup> {
                     }
                   },
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Divider(
-                        color: Colors.grey,
-                        height: 10,
-                      ),
-                    ),
-                    Text(
-                      '別サービスでログイン',
-                      style: TextStyle(
-                        color: Colors.grey,
-                      ),
-                    ),
-                    Expanded(
-                      child: Divider(
-                        color: Colors.grey,
-                        height: 10,
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    CircleButton(
-                      icon: Icon(MdiIcons.twitter),
-                      color: Color.fromRGBO(29, 161, 242, 1),
-                      onPressed: () {},
-                    ),
-                    CircleButton(
-                      icon: Icon(MdiIcons.facebook),
-                      color: Color.fromRGBO(59, 89, 152, 1),
-                      onPressed: () {},
-                    ),
-                    CircleButton(
-                      icon: Icon(MdiIcons.google),
-                      color: Color.fromRGBO(219, 68, 55, 1),
-                      onPressed: () {},
-                    )
-                  ],
-                ),
+                // Row(
+                //   children: [
+                //     Expanded(
+                //       child: Divider(
+                //         color: Colors.grey,
+                //         height: 10,
+                //       ),
+                //     ),
+                //     Text(
+                //       '別サービスでログイン',
+                //       style: TextStyle(
+                //         color: Colors.grey,
+                //       ),
+                //     ),
+                //     Expanded(
+                //       child: Divider(
+                //         color: Colors.grey,
+                //         height: 10,
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //   children: [
+                //     CircleButton(
+                //       icon: Icon(MdiIcons.twitter),
+                //       color: Color.fromRGBO(29, 161, 242, 1),
+                //       onPressed: () {
+                //       },
+                //     ),
+                //     CircleButton(
+                //       icon: Icon(MdiIcons.facebook),
+                //       color: Color.fromRGBO(59, 89, 152, 1),
+                //       onPressed: () {},
+                //     ),
+                //     CircleButton(
+                //       icon: Icon(MdiIcons.google),
+                //       color: Color.fromRGBO(219, 68, 55, 1),
+                //       onPressed: () {},
+                //     )
+                //   ],
+                // ),
                 RoundedButton(
                   title: 'ログイン',
                   color: Colors.blueGrey[200],
