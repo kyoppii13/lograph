@@ -15,3 +15,22 @@ const kTextFieldDecoration = InputDecoration(
     borderRadius: BorderRadius.all(Radius.circular(32)),
   ),
 );
+
+String emailValidator(String value) {
+  Pattern pattern =
+      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+  RegExp regex = new RegExp(pattern);
+  if (!regex.hasMatch(value)) {
+    return 'メールアドレスのフォーマットが間違っています';
+  } else {
+    return null;
+  }
+}
+
+String passwordValidator(String value) {
+  if (value.length < 8) {
+    return 'パスワードは8文字以上にしてください';
+  } else {
+    return null;
+  }
+}

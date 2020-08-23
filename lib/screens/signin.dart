@@ -19,6 +19,7 @@ class _SigninState extends State<Signin> {
   bool isShowSpinner = false;
   String email;
   String password;
+  final GlobalKey<FormState> _registerFormKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -45,53 +46,58 @@ class _SigninState extends State<Signin> {
               SizedBox(
                 height: 10,
               ),
-              Container(
-                height: 42,
-                child: TextField(
-                  keyboardType: TextInputType.emailAddress,
-                  textAlign: TextAlign.center,
-                  onChanged: (value) {
-                    email = value;
-                  },
-                  decoration: kTextFieldDecoration.copyWith(
-                      hintText: 'メールアドレスを入力してください'),
-                ),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Container(
-                height: 42,
-                child: TextField(
-                  obscureText: true,
-                  textAlign: TextAlign.center,
-                  onChanged: (value) {
-                    password = value;
-                  },
-                  decoration:
-                      kTextFieldDecoration.copyWith(hintText: 'パスワードを入力してください'),
+              Form(
+                key: _registerFormKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      keyboardType: TextInputType.emailAddress,
+                      textAlign: TextAlign.center,
+                      onChanged: (value) {
+                        email = value;
+                      },
+                      validator: emailValidator,
+                      decoration: kTextFieldDecoration.copyWith(
+                          hintText: 'メールアドレスを入力してください'),
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    TextFormField(
+                      obscureText: true,
+                      textAlign: TextAlign.center,
+                      onChanged: (value) {
+                        password = value;
+                      },
+                      validator: passwordValidator,
+                      decoration: kTextFieldDecoration.copyWith(
+                          hintText: 'パスワードを入力してください'),
+                    )
+                  ],
                 ),
               ),
               RoundedButton(
                 title: 'ログイン',
                 color: Colors.blueAccent,
                 onPressed: () async {
-                  setState(() {
-                    isShowSpinner = true;
-                  });
-                  try {
-                    final user = await _auth.signInWithEmailAndPassword(
-                        email: email, password: password);
-                    if (user != null) {
-                      Navigator.popUntil(
-                          context, ModalRoute.withName(Signup.id));
-                      Navigator.pushReplacementNamed(context, LogList.id);
-                    }
+                  if (this._registerFormKey.currentState.validate()) {
                     setState(() {
-                      isShowSpinner = false;
+                      isShowSpinner = true;
                     });
-                  } catch (e) {
-                    print(e);
+                    try {
+                      final user = await _auth.signInWithEmailAndPassword(
+                          email: email, password: password);
+                      if (user != null) {
+                        Navigator.popUntil(
+                            context, ModalRoute.withName(Signup.id));
+                        Navigator.pushReplacementNamed(context, LogList.id);
+                      }
+                      setState(() {
+                        isShowSpinner = false;
+                      });
+                    } catch (e) {
+                      print(e);
+                    }
                   }
                 },
               ),

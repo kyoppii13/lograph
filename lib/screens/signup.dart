@@ -1,11 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:lograph/common/circle_button.dart';
 import 'package:lograph/common/constants.dart';
 import 'package:lograph/common/rounded_button.dart';
 import 'package:lograph/screens/category_list.dart';
 import 'package:lograph/screens/signin.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 class Signup extends StatefulWidget {
@@ -16,9 +15,45 @@ class Signup extends StatefulWidget {
 
 class _SignupState extends State<Signup> {
   final _auth = FirebaseAuth.instance;
+  final _store = Firestore.instance;
+  final GlobalKey<FormState> _registerFormKey = GlobalKey<FormState>();
+
   bool isShowSpinner = false;
   String email;
   String password;
+
+  @override
+  initState() {
+    // _auth
+    //     .currentUser()
+    //     .then((currentUser) => {
+    //           if (currentUser == null)
+    //             {
+    //               print(currentUser)
+    //               // setState(() {
+    //               //   isShowSpinner = false;
+    //               // });
+    //             }
+    //           else
+    //             {
+    //               print(currentUser)
+    //               // _store
+    //               //     .collection('users')
+    //               //     .document(currentUser.uid)
+    //               //     .get()
+    //               //     .then((DocumentSnapshot result) =>
+    //               //         Navigator.pushReplacementNamed(
+    //               //             context, CategoryList.id))
+    //               //     .catchError(
+    //               //       (error) => print(error),
+    //               //     )
+    //             }
+    //         })
+    //     .catchError(
+    //       (error) => print(error),
+    //     );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,55 +88,60 @@ class _SignupState extends State<Signup> {
                   ],
                 ),
                 SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  height: 42,
-                  child: TextField(
-                    keyboardType: TextInputType.emailAddress,
-                    textAlign: TextAlign.center,
-                    onChanged: (value) {
-                      email = value;
-                    },
-                    decoration: kTextFieldDecoration.copyWith(
-                        hintText: 'メールアドレスを入力してください'),
-                  ),
-                ),
-                SizedBox(
                   height: 8,
                 ),
-                Container(
-                  height: 42,
-                  child: TextField(
-                    obscureText: true,
-                    textAlign: TextAlign.center,
-                    onChanged: (value) {
-                      password = value;
-                    },
-                    decoration: kTextFieldDecoration.copyWith(
-                        hintText: 'パスワードを入力してください'),
+                Form(
+                  key: _registerFormKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        keyboardType: TextInputType.emailAddress,
+                        textAlign: TextAlign.center,
+                        onChanged: (value) {
+                          email = value;
+                        },
+                        validator: emailValidator,
+                        decoration: kTextFieldDecoration.copyWith(
+                            hintText: 'メールアドレスを入力してください'),
+                      ),
+                      SizedBox(
+                        height: 12,
+                      ),
+                      TextFormField(
+                        obscureText: true,
+                        textAlign: TextAlign.center,
+                        onChanged: (value) {
+                          password = value;
+                        },
+                        validator: passwordValidator,
+                        decoration: kTextFieldDecoration.copyWith(
+                            hintText: 'パスワードを入力してください'),
+                      ),
+                    ],
                   ),
                 ),
                 RoundedButton(
                   title: '新規登録',
                   color: Colors.blueAccent,
                   onPressed: () async {
-                    setState(() {
-                      isShowSpinner = true;
-                    });
-                    try {
-                      final newUser =
-                          await _auth.createUserWithEmailAndPassword(
-                              email: email, password: password);
-                      if (newUser != null) {
-                        Navigator.pushReplacementNamed(
-                            context, CategoryList.id);
-                      }
+                    if (this._registerFormKey.currentState.validate()) {
                       setState(() {
-                        isShowSpinner = false;
+                        isShowSpinner = true;
                       });
-                    } catch (e) {
-                      print(e);
+                      try {
+                        final newUser =
+                            await _auth.createUserWithEmailAndPassword(
+                                email: email, password: password);
+                        if (newUser != null) {
+                          Navigator.pushReplacementNamed(
+                              context, CategoryList.id);
+                        }
+                        setState(() {
+                          isShowSpinner = false;
+                        });
+                      } catch (e) {
+                        print(e);
+                      }
                     }
                   },
                 ),
