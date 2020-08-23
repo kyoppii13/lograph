@@ -18,41 +18,42 @@ class _SignupState extends State<Signup> {
   final _store = Firestore.instance;
   final GlobalKey<FormState> _registerFormKey = GlobalKey<FormState>();
 
-  bool isShowSpinner = false;
+  bool isShowSpinner = true;
   String email;
   String password;
 
   @override
   initState() {
-    // _auth
-    //     .currentUser()
-    //     .then((currentUser) => {
-    //           if (currentUser == null)
-    //             {
-    //               print(currentUser)
-    //               // setState(() {
-    //               //   isShowSpinner = false;
-    //               // });
-    //             }
-    //           else
-    //             {
-    //               print(currentUser)
-    //               // _store
-    //               //     .collection('users')
-    //               //     .document(currentUser.uid)
-    //               //     .get()
-    //               //     .then((DocumentSnapshot result) =>
-    //               //         Navigator.pushReplacementNamed(
-    //               //             context, CategoryList.id))
-    //               //     .catchError(
-    //               //       (error) => print(error),
-    //               //     )
-    //             }
-    //         })
-    //     .catchError(
-    //       (error) => print(error),
-    //     );
-    // super.initState();
+    _auth
+        .currentUser()
+        .then((currentUser) => {
+              if (currentUser == null)
+                {
+                  setState(() {
+                    isShowSpinner = false;
+                  })
+                }
+              else
+                {
+                  _store
+                      .collection('users')
+                      .document(currentUser.uid)
+                      .get()
+                      .then((DocumentSnapshot result) => {
+                            Navigator.pushReplacementNamed(context, LogList.id),
+                            setState(() {
+                              isShowSpinner = false;
+                            })
+                          })
+                      .catchError(
+                        (error) => print(error),
+                      )
+                }
+            })
+        .catchError(
+          (error) => print(error),
+        );
+    super.initState();
   }
 
   @override

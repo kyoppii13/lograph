@@ -41,7 +41,7 @@ class _LogListState extends State<LogList> {
     }
   }
 
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
   String _title = 'ログ一覧';
   Widget _appBarAction;
   static List<Widget> _screenList = [
