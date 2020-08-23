@@ -32,91 +32,88 @@ class _UserProfileState extends State<UserProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        children: [
-          ClipPath(
-            clipper: UserProfileCurveClipper(),
-            child: Container(
-              height: 230,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topRight,
-                  end: Alignment.bottomLeft,
-                  colors: [
-                    Color(0xFF1dd5e6),
-                    Color(0xFF0d47a1),
-                  ],
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    backgroundImage:
-                        AssetImage('images/tatsuro_profile_image.jpg'),
-                    backgroundColor: Colors.transparent,
-                    radius: 40.0,
-                  ),
-                  SizedBox(height: 12),
-                  Text(
-                    '宮本タツロー',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+    return Column(
+      children: [
+        ClipPath(
+          clipper: UserProfileCurveClipper(),
+          child: Container(
+            height: 300,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+                  Color(0xFF1dd5e6),
+                  Color(0xFF0d47a1),
                 ],
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconTextButton(title: '設定', icon: Icons.settings),
-                IconTextButton(title: 'ヘルプ', icon: Icons.help),
-                IconTextButton(title: 'お問い合わせ', icon: Icons.mail),
-              ],
-            ),
-          ),
-          Container(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              // crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                RoundedButton(
-                  title: 'ログアウト',
-                  color: Colors.redAccent,
-                  onPressed: () async {
-                    // setState(() {
-                    //   isShowSpinner = true;
-                    // });
-                    try {
-                      // final user = await _auth.signInWithEmailAndPassword(
-                      //     email: email, password: password);
-                      // if (user != null) {
-                      //   Navigator.popUntil(
-                      //       context, ModalRoute.withName(Signup.id));
-                      //   Navigator.pushReplacementNamed(context, LogList.id);
-                      // }
-                      setState(() {
-                        // isShowSpinner = false;
-                      });
-                    } catch (e) {
-                      print(e);
-                    }
-                  },
+                CircleAvatar(
+                  backgroundImage:
+                      AssetImage('images/tatsuro_profile_image.jpg'),
+                  backgroundColor: Colors.transparent,
+                  radius: 40.0,
+                ),
+                SizedBox(height: 12),
+                Text(
+                  '宮本タツロー',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
           ),
-        ],
-      ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconTextButton(title: '設定', icon: Icons.settings),
+              IconTextButton(title: 'ヘルプ', icon: Icons.help),
+              IconTextButton(title: 'お問い合わせ', icon: Icons.mail),
+            ],
+          ),
+        ),
+        Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            // crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              RoundedButton(
+                title: 'ログアウト',
+                color: Colors.redAccent,
+                onPressed: () async {
+                  // setState(() {
+                  //   isShowSpinner = true;
+                  // });
+                  try {
+                    // final user = await _auth.signInWithEmailAndPassword(
+                    //     email: email, password: password);
+                    // if (user != null) {
+                    //   Navigator.popUntil(
+                    //       context, ModalRoute.withName(Signup.id));
+                    //   Navigator.pushReplacementNamed(context, LogList.id);
+                    // }
+                    setState(() {
+                      // isShowSpinner = false;
+                    });
+                  } catch (e) {
+                    print(e);
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

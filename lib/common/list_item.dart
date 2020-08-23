@@ -24,10 +24,8 @@ class ListItem extends StatelessWidget {
           style: TextStyle(fontSize: 18),
         ),
         leading: icon,
-        trailing: Expanded(
-          child:
-              FittedBox(fit: BoxFit.fill, child: Icon(Icons.arrow_forward_ios)),
-        ),
+        trailing:
+            FittedBox(fit: BoxFit.fill, child: Icon(Icons.arrow_forward_ios)),
         onTap: () => {Navigator.pushNamed(context, LogDetail.id)},
       ),
     );

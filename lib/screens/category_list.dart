@@ -36,10 +36,8 @@ class _CategoryListState extends State<CategoryList> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: SafeArea(
-        child: GetLogs(),
-      ),
+    return SafeArea(
+      child: GetLogs(),
     );
   }
 }

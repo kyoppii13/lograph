@@ -20,11 +20,14 @@ class LogList extends StatefulWidget {
 
 class _LogListState extends State<LogList> {
   final _auth = FirebaseAuth.instance;
+  bool _isVisibleFloatingActionButton = true;
+  FloatingActionButton floatingActionButton;
 
   @override
   void initState() {
     super.initState();
     getCurrentUser();
+    print('initState');
   }
 
   void getCurrentUser() async {
@@ -40,7 +43,7 @@ class _LogListState extends State<LogList> {
 
   int _selectedIndex = 0;
   String _title = 'ログ一覧';
-  String _appBarAction = LogInput.id;
+  Widget _appBarAction;
   static List<Widget> _screenList = [
     LogListBody(),
     CategoryList(),
@@ -52,20 +55,19 @@ class _LogListState extends State<LogList> {
       switch (index) {
         case 0:
           {
-            _title = 'ログ一覧';
-            _appBarAction = LogInput.id;
+            _isVisibleFloatingActionButton = true;
+            _appBarAction = LogInput();
           }
           break;
         case 1:
           {
-            _title = 'グラフ一覧';
-            _appBarAction = CategoryInput.id;
+            _isVisibleFloatingActionButton = true;
+            _appBarAction = CategoryInput();
           }
           break;
         case 2:
           {
-            _title = 'プロフィール';
-            _appBarAction = UserProfile.id;
+            _isVisibleFloatingActionButton = false;
           }
           break;
       }
@@ -75,21 +77,6 @@ class _LogListState extends State<LogList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(_title),
-        backgroundColor: Colors.blue,
-        actions: _appBarAction != UserProfile.id
-            ? [
-                IconButton(
-                  icon: Icon(Icons.add),
-                  color: Colors.white,
-                  onPressed: () {
-                    Navigator.pushNamed(context, LogInput.id);
-                  },
-                ),
-              ]
-            : [],
-      ),
       body: _screenList[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: [
@@ -108,6 +95,22 @@ class _LogListState extends State<LogList> {
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
+      ),
+      floatingActionButton: Visibility(
+        visible: _isVisibleFloatingActionButton,
+        child: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) {
+                    return _appBarAction;
+                  },
+                  fullscreenDialog: true),
+            );
+          },
+        ),
       ),
     );
   }
