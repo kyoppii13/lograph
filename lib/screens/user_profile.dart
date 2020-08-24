@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lograph/common/rounded_button.dart';
 import 'package:lograph/common/icon_text_button.dart';
-
-FirebaseUser loggedInUser;
+import 'package:lograph/screens/log_list.dart';
 
 class UserProfile extends StatefulWidget {
   static const String id = 'user_info';
@@ -13,6 +13,9 @@ class UserProfile extends StatefulWidget {
 
 class _UserProfileState extends State<UserProfile> {
   final _auth = FirebaseAuth.instance;
+  final _store = Firestore.instance;
+  String loggedInUser = '';
+
   @override
   void initState() {
     super.initState();
@@ -20,14 +23,25 @@ class _UserProfileState extends State<UserProfile> {
   }
 
   void getCurrentUser() async {
-    try {
-      final user = await _auth.currentUser();
-      if (user != null) {
-        loggedInUser = user;
-      }
-    } catch (e) {
-      print(e);
-    }
+    _auth
+        .currentUser()
+        .then((currentUser) => {
+              _store
+                  .collection('users')
+                  .document(currentUser.uid)
+                  .get()
+                  .then((DocumentSnapshot result) => {
+                        setState(() {
+                          loggedInUser = result.data['email'];
+                        })
+                      })
+                  .catchError(
+                    (error) => print(error),
+                  )
+            })
+        .catchError(
+          (error) => print(error),
+        );
   }
 
   @override
@@ -60,7 +74,7 @@ class _UserProfileState extends State<UserProfile> {
                 ),
                 SizedBox(height: 12),
                 Text(
-                  '宮本タツロー',
+                  loggedInUser,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,

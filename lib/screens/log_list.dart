@@ -26,19 +26,7 @@ class _LogListState extends State<LogList> {
   @override
   void initState() {
     super.initState();
-    getCurrentUser();
     print('initState');
-  }
-
-  void getCurrentUser() async {
-    try {
-      final user = await _auth.currentUser();
-      if (user != null) {
-        loggedInUser = user;
-      }
-    } catch (e) {
-      print(e);
-    }
   }
 
   int _selectedIndex = 1;
