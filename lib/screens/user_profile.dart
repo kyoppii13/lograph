@@ -3,7 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lograph/common/rounded_button.dart';
 import 'package:lograph/common/icon_text_button.dart';
-import 'package:lograph/screens/log_list.dart';
+import 'package:lograph/screens/log_list_old.dart';
+import 'package:lograph/screens/setting.dart';
 
 class UserProfile extends StatefulWidget {
   static const String id = 'user_info';
@@ -90,7 +91,11 @@ class _UserProfileState extends State<UserProfile> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              IconTextButton(title: '設定', icon: Icons.settings),
+              IconTextButton(
+                title: '設定',
+                icon: Icons.settings,
+                onPressed: () => {Navigator.pushNamed(context, Setting.id)},
+              ),
               IconTextButton(title: 'ヘルプ', icon: Icons.help),
               IconTextButton(title: 'お問い合わせ', icon: Icons.mail),
             ],
