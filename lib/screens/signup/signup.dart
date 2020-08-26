@@ -4,37 +4,37 @@ import 'package:flutter/material.dart';
 import 'package:lograph/common/constants.dart';
 import 'package:lograph/common/rounded_button.dart';
 import 'package:lograph/screens/log_list.dart';
-import 'package:lograph/screens/signin.dart';
+import 'package:lograph/screens/signin_model/signin.dart';
 import 'package:lograph/screens/signup/signup_model.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 import 'package:lograph/screens/log_list_model.dart';
 
-// class Signup extends StatefulWidget {
-//   static const String id = 'signup';
-//   @override
-//   _SignupState createState() => _SignupState();
-// }
-
-class Signup extends StatelessWidget {
-  // final _auth = FirebaseAuth.instance;
-  // final _store = Firestore.instance;
+class Signup extends StatefulWidget {
   static const String id = 'signup';
-  final GlobalKey<FormState> _registerFormKey = GlobalKey<FormState>();
+  @override
+  _SignupState createState() => _SignupState();
+}
 
-  bool isShowSpinner = false;
+class _SignupState extends State<Signup> {
+  // bool isShowSpinner = true;
   String email;
   String password;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final Firestore _store = Firestore.instance;
+  final GlobalKey<FormState> _registerFormKey = GlobalKey<FormState>();
+  final signupState = SignUpModel();
 
-  // @override
+  @override
   // initState() {
+  //   signupState.isShowSpinner = true;
   //   _auth
   //       .currentUser()
   //       .then((currentUser) => {
   //             if (currentUser == null)
   //               {
   //                 setState(() {
-  //                   isShowSpinner = false;
+  //                   signupState.isShowSpinner = false;
   //                 })
   //               }
   //             else
@@ -58,7 +58,7 @@ class Signup extends StatelessWidget {
   //                             ),
   //                           ),
   //                           setState(() {
-  //                             isShowSpinner = false;
+  //                             signupState.isShowSpinner = false;
   //                           })
   //                         })
   //                     .catchError(
@@ -74,8 +74,8 @@ class Signup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<SignUpModel>(
-      create: (_) => SignUpModel(),
+    return ChangeNotifierProvider<SignUpModel>.value(
+      value: signupState,
       child: Scaffold(
           backgroundColor: Colors.white,
           body: Consumer<SignUpModel>(builder: (context, model, child) {
@@ -163,13 +163,26 @@ class Signup extends StatelessWidget {
                                           ),
                                         ),
                                       ),
-                                      isShowSpinner = false,
+                                      model.isShowSpinner = false,
                                     })
                                 .catchError((error) {
                               print(error);
                             });
                           }
                         }),
+                    RoundedButton(
+                      title: 'ログイン',
+                      color: Colors.blueGrey[200],
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute<void>(
+                            builder: (context) {
+                              return Signin();
+                            },
+                          ),
+                        );
+                      },
+                    ),
                     // Row(
                     //   children: [
                     //     Expanded(
@@ -213,19 +226,6 @@ class Signup extends StatelessWidget {
                     //     )
                     //   ],
                     // ),
-                    RoundedButton(
-                      title: 'ログイン',
-                      color: Colors.blueGrey[200],
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute<void>(
-                            builder: (context) {
-                              return Signin();
-                            },
-                          ),
-                        );
-                      },
-                    ),
                   ],
                 ),
               ),

@@ -3,7 +3,7 @@ import 'package:lograph/screens/log_list_model.dart';
 import 'package:lograph/screens/category_input.dart';
 import 'package:lograph/screens/log_detail.dart';
 import 'package:lograph/screens/log_input.dart';
-import 'package:lograph/screens/signin.dart';
+import 'package:lograph/screens/signin_model/signin.dart';
 import 'package:lograph/screens/signup/signup.dart';
 import 'package:lograph/screens/category_list.dart';
 import 'package:lograph/screens/category_detail.dart';

@@ -21,12 +21,16 @@ class SignUpModel extends ChangeNotifier {
           email: email,
           password: password,
         )
-        .then((AuthResult currentUser) =>
-            _store.collection("users").document(currentUser.user.uid).setData({
+        .then(
+          (AuthResult currentUser) =>
+              _store.collection("users").document(currentUser.user.uid).setData(
+            {
               "uid": currentUser.user.uid,
               "email": email,
-            }).catchError((error) {
-              print(error);
-            }));
+            },
+          ).catchError((error) {
+            print(error);
+          }),
+        );
   }
 }
