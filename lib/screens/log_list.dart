@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lograph/screens/category_list.dart';
 import 'package:lograph/screens/log_input.dart';
-import 'package:lograph/screens/category_input.dart';
 import 'package:lograph/screens/user_profile.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:lograph/common/list_item.dart';
@@ -20,18 +19,15 @@ class LogList extends StatefulWidget {
 
 class _LogListState extends State<LogList> {
   final _auth = FirebaseAuth.instance;
-  bool _isVisibleFloatingActionButton = true;
   FloatingActionButton floatingActionButton;
 
   @override
   void initState() {
     super.initState();
-    print('initState');
   }
 
   int _selectedIndex = 1;
   String _title = 'ログ一覧';
-  Widget _appBarAction;
   static List<Widget> _screenList = [
     LogListBody(),
     CategoryList(),
@@ -40,25 +36,6 @@ class _LogListState extends State<LogList> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      switch (index) {
-        case 0:
-          {
-            _isVisibleFloatingActionButton = true;
-            _appBarAction = LogInput();
-          }
-          break;
-        case 1:
-          {
-            _isVisibleFloatingActionButton = true;
-            _appBarAction = CategoryInput();
-          }
-          break;
-        case 2:
-          {
-            _isVisibleFloatingActionButton = false;
-          }
-          break;
-      }
     });
   }
 
@@ -85,7 +62,7 @@ class _LogListState extends State<LogList> {
         onTap: _onItemTapped,
       ),
       floatingActionButton: Visibility(
-        visible: _isVisibleFloatingActionButton,
+        visible: _selectedIndex != 2,
         child: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
@@ -93,7 +70,7 @@ class _LogListState extends State<LogList> {
               context,
               MaterialPageRoute(
                   builder: (context) {
-                    return _appBarAction;
+                    return LogInput();
                   },
                   fullscreenDialog: true),
             );
