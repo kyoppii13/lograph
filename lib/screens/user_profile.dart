@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lograph/common/rounded_button.dart';
 import 'package:lograph/common/icon_text_button.dart';
-import 'package:lograph/screens/log_list_old.dart';
 import 'package:lograph/screens/setting.dart';
 
 class UserProfile extends StatefulWidget {

@@ -3,12 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lograph/common/constants.dart';
 import 'package:lograph/common/rounded_button.dart';
-import 'package:lograph/screens/log_list.dart';
+import 'package:lograph/screens/log_list/log_list.dart';
 import 'package:lograph/screens/signin_model/signin.dart';
 import 'package:lograph/screens/signup/signup_model.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
-import 'package:lograph/screens/log_list_model.dart';
+import 'package:lograph/screens/log_list/log_list_model.dart';
 
 class Signup extends StatefulWidget {
   static const String id = 'signup';
@@ -24,53 +24,56 @@ class _SignupState extends State<Signup> {
   final Firestore _store = Firestore.instance;
   final GlobalKey<FormState> _registerFormKey = GlobalKey<FormState>();
   final signupState = SignUpModel();
+  final logListState = LogListModel();
 
   @override
-  // initState() {
-  //   signupState.isShowSpinner = true;
-  //   _auth
-  //       .currentUser()
-  //       .then((currentUser) => {
-  //             if (currentUser == null)
-  //               {
-  //                 setState(() {
-  //                   signupState.isShowSpinner = false;
-  //                 })
-  //               }
-  //             else
-  //               {
-  //                 _store
-  //                     .collection('users')
-  //                     .document(currentUser.uid)
-  //                     .get()
-  //                     .then((DocumentSnapshot result) => {
-  //                           Navigator.of(context).push(
-  //                             MaterialPageRoute<void>(
-  //                               builder: (context) =>
-  //                                   ChangeNotifierProvider<LogListModel>(
-  //                                 create: (_) => LogListModel(),
-  //                                 child: Consumer<LogListModel>(
-  //                                   builder: (context, model, child) {
-  //                                     return LogList();
-  //                                   },
-  //                                 ),
-  //                               ),
-  //                             ),
-  //                           ),
-  //                           setState(() {
-  //                             signupState.isShowSpinner = false;
-  //                           })
-  //                         })
-  //                     .catchError(
-  //                       (error) => print(error),
-  //                     )
-  //               }
-  //           })
-  //       .catchError(
-  //         (error) => print(error),
-  //       );
-  //   super.initState();
-  // }
+  initState() {
+    signupState.isShowSpinner = true;
+    _auth
+        .currentUser()
+        .then((currentUser) => {
+              if (currentUser == null)
+                {
+                  setState(() {
+                    signupState.isShowSpinner = false;
+                  })
+                }
+              else
+                {
+                  _store
+                      .collection('users')
+                      .document(currentUser.uid)
+                      .get()
+                      .then((DocumentSnapshot result) => {
+                            logListState.currentUser = result,
+                            Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                builder: (context) =>
+                                    ChangeNotifierProvider<LogListModel>.value(
+                                  // create: (_) => LogListModel(),
+                                  value: logListState,
+                                  child: Consumer<LogListModel>(
+                                    builder: (context, model, child) {
+                                      return LogList();
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                            setState(() {
+                              signupState.isShowSpinner = false;
+                            })
+                          })
+                      .catchError(
+                        (error) => print(error),
+                      )
+                }
+            })
+        .catchError(
+          (error) => print(error),
+        );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +151,8 @@ class _SignupState extends State<Signup> {
                             model.isShowSpinner = true;
                             await model
                                 .signUp()
-                                .then((_) => {
+                                .then((store) => {
+                                      print(store),
                                       Navigator.of(context).pushReplacement(
                                         MaterialPageRoute<void>(
                                           builder: (context) =>

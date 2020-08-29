@@ -10,8 +10,16 @@ class LogListModel with ChangeNotifier {
   int get currentIndex => _currentIndex;
   set currentIndex(int index) {
     _currentIndex = index;
+    if (index == 2) {
+      _isVisibleButton = false;
+    } else {
+      _isVisibleButton = true;
+    }
     notifyListeners();
   }
+
+  bool _isVisibleButton = true;
+  bool get isVisibleButton => _isVisibleButton;
 
   Future fetchLogs() async {
     final documents =

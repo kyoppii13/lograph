@@ -16,21 +16,26 @@ class SignUpModel extends ChangeNotifier {
   final Firestore _store = Firestore.instance;
 
   Future signUp() async {
-    await _auth
-        .createUserWithEmailAndPassword(
-          email: email,
-          password: password,
-        )
-        .then(
-          (AuthResult currentUser) =>
-              _store.collection("users").document(currentUser.user.uid).setData(
-            {
-              "uid": currentUser.user.uid,
-              "email": email,
-            },
-          ).catchError((error) {
-            print(error);
-          }),
-        );
+    final result = await (_auth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    ));
+    final store =
+        await _store.collection("users").document(result.user.uid).setData({
+      "uid": result.user.uid,
+      "email": email,
+    });
+    return store;
+    // .then(
+    //   (AuthResult currentUser) =>
+    //       _store.collection("users").document(currentUser.user.uid).setData(
+    //     {
+    //       "uid": currentUser.user.uid,
+    //       "email": email,
+    //     },
+    //   ).catchError((error) {
+    //     print(error);
+    //   }),
+    // );
   }
 }
