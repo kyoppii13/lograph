@@ -61,11 +61,17 @@ class _UserProfileState extends State<UserProfile> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CircleAvatar(
-                          backgroundImage: NetworkImage(snapshot.data.imageUrl),
-                          backgroundColor: Colors.transparent,
-                          radius: 40,
-                        ),
+                        snapshot.data.imageUrl != ''
+                            ? CircleAvatar(
+                                backgroundImage:
+                                    NetworkImage(snapshot.data.imageUrl),
+                                radius: 40,
+                              )
+                            : CircleAvatar(
+                                child: Image.asset('images/logo.png'),
+                                backgroundColor: Colors.white,
+                                radius: 40,
+                              ),
                         SizedBox(height: 12),
                         Text(
                           snapshot.data.email,

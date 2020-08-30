@@ -88,9 +88,11 @@ class _SigninState extends State<Signin> {
                       final user = await _auth.signInWithEmailAndPassword(
                           email: email, password: password);
                       if (user != null) {
-                        Navigator.popUntil(
-                            context, ModalRoute.withName(Signup.id));
-                        Navigator.pushReplacementNamed(context, LogList.id);
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => LogList()),
+                          (_) => false,
+                        );
                       }
                       setState(() {
                         isShowSpinner = false;
