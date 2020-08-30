@@ -17,107 +17,118 @@ class _UserProfileState extends State<UserProfile> {
   final _store = Firestore.instance;
   User loggedInUser;
 
-  void getCurrentUser() async {
+  Future<User> _getCurrentUser() async {
     final user = await _auth.currentUser();
     final result = await _store.collection('users').document(user.uid).get();
     final email = result.data['email'].toString();
     final uid = result.data['uid'].toString();
-    setState(() {
-      loggedInUser = User(email, uid);
-    });
+    final imageUrl = result.data['imageUrl'].toString();
+    return Future.value(User(email, uid, imageUrl));
   }
 
   @override
   void initState() {
-    getCurrentUser();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ClipPath(
-          clipper: UserProfileCurveClipper(),
-          child: Container(
-            height: 300,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [
-                  Color(0xFF1dd5e6),
-                  Color(0xFF0d47a1),
-                ],
-              ),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+    return FutureBuilder<User>(
+        future: _getCurrentUser(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (snapshot.connectionState == ConnectionState.done) {
+            return Column(
               children: [
-                CircleAvatar(
-                  backgroundImage:
-                      AssetImage('images/tatsuro_profile_image.jpg'),
-                  backgroundColor: Colors.transparent,
-                  radius: 40.0,
+                ClipPath(
+                  clipper: UserProfileCurveClipper(),
+                  child: Container(
+                    height: 300,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topRight,
+                        end: Alignment.bottomLeft,
+                        colors: [
+                          Color(0xFF1dd5e6),
+                          Color(0xFF0d47a1),
+                        ],
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircleAvatar(
+                          backgroundImage: NetworkImage(snapshot.data.imageUrl),
+                          backgroundColor: Colors.transparent,
+                          radius: 40,
+                        ),
+                        SizedBox(height: 12),
+                        Text(
+                          snapshot.data.email,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                SizedBox(height: 12),
-                Text(
-                  loggedInUser != null ? loggedInUser.email : '',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconTextButton(
+                        title: '設定',
+                        icon: Icons.settings,
+                      ),
+                      IconTextButton(title: 'ヘルプ', icon: Icons.help),
+                      IconTextButton(title: 'お問い合わせ', icon: Icons.mail),
+                    ],
+                  ),
+                ),
+                Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      RoundedButton(
+                        title: 'ログアウト',
+                        color: Colors.redAccent,
+                        onPressed: () async {
+                          // setState(() {
+                          //   isShowSpinner = true;
+                          // });
+                          try {
+                            // final user = await _auth.signInWithEmailAndPassword(
+                            //     email: email, password: password);
+                            // if (user != null) {
+                            //   Navigator.popUntil(
+                            //       context, ModalRoute.withName(Signup.id));
+                            //   Navigator.pushReplacementNamed(context, LogList.id);
+                            // }
+                            setState(() {
+                              // isShowSpinner = false;
+                            });
+                          } catch (e) {
+                            print(e);
+                          }
+                        },
+                      ),
+                    ],
                   ),
                 ),
               ],
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconTextButton(title: '設定', icon: Icons.settings),
-              IconTextButton(title: 'ヘルプ', icon: Icons.help),
-              IconTextButton(title: 'お問い合わせ', icon: Icons.mail),
-            ],
-          ),
-        ),
-        Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            // crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              RoundedButton(
-                title: 'ログアウト',
-                color: Colors.redAccent,
-                onPressed: () async {
-                  // setState(() {
-                  //   isShowSpinner = true;
-                  // });
-                  try {
-                    // final user = await _auth.signInWithEmailAndPassword(
-                    //     email: email, password: password);
-                    // if (user != null) {
-                    //   Navigator.popUntil(
-                    //       context, ModalRoute.withName(Signup.id));
-                    //   Navigator.pushReplacementNamed(context, LogList.id);
-                    // }
-                    setState(() {
-                      // isShowSpinner = false;
-                    });
-                  } catch (e) {
-                    print(e);
-                  }
-                },
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
+            );
+          }
+        });
   }
 }
 
