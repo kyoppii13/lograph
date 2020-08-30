@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lograph/models/User.dart';
 import 'package:lograph/screens/setting.dart';
+import 'package:lograph/screens/signup.dart';
 import 'package:lograph/widgets/rounded_button.dart';
 import 'package:lograph/widgets/icon_text_button.dart';
 
@@ -113,20 +114,13 @@ class _UserProfileState extends State<UserProfile> {
                         title: 'ログアウト',
                         color: Colors.redAccent,
                         onPressed: () async {
-                          // setState(() {
-                          //   isShowSpinner = true;
-                          // });
                           try {
-                            // final user = await _auth.signInWithEmailAndPassword(
-                            //     email: email, password: password);
-                            // if (user != null) {
-                            //   Navigator.popUntil(
-                            //       context, ModalRoute.withName(Signup.id));
-                            //   Navigator.pushReplacementNamed(context, LogList.id);
-                            // }
-                            setState(() {
-                              // isShowSpinner = false;
-                            });
+                            await _auth.signOut();
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (context) => Signup()),
+                              (_) => false,
+                            );
                           } catch (e) {
                             print(e);
                           }
