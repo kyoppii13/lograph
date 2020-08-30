@@ -142,6 +142,7 @@ class _SignupState extends State<Signup> {
                                 "uid": currentUser.user.uid,
                                 "email": email,
                                 "imageUrl": '',
+                                "createdAt": Timestamp.now(),
                               })
                               .then((result) => {
                                     Navigator.pushReplacementNamed(
