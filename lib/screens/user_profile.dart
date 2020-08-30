@@ -2,9 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lograph/models/User.dart';
+import 'package:lograph/screens/setting.dart';
 import 'package:lograph/widgets/rounded_button.dart';
 import 'package:lograph/widgets/icon_text_button.dart';
-import 'package:lograph/screens/log_list.dart';
 
 class UserProfile extends StatefulWidget {
   static const String id = 'user_info';
@@ -89,6 +89,16 @@ class _UserProfileState extends State<UserProfile> {
                       IconTextButton(
                         title: '設定',
                         icon: Icons.settings,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return Setting(snapshot.data);
+                              },
+                            ),
+                          );
+                        },
                       ),
                       IconTextButton(title: 'ヘルプ', icon: Icons.help),
                       IconTextButton(title: 'お問い合わせ', icon: Icons.mail),
