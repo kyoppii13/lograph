@@ -6,7 +6,6 @@ import 'package:lograph/screens/signin.dart';
 import 'package:lograph/screens/signup.dart';
 import 'package:lograph/screens/category_list.dart';
 import 'package:lograph/screens/category_detail.dart';
-import 'package:lograph/screens/log_list.dart';
 import 'package:lograph/screens/user_profile.dart';
 
 void main() => runApp(Lograph());

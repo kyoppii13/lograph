@@ -15,7 +15,6 @@ class UserProfile extends StatefulWidget {
 class _UserProfileState extends State<UserProfile> {
   final _auth = FirebaseAuth.instance;
   final _store = Firestore.instance;
-  User loggedInUser;
 
   Future<User> _getCurrentUser() async {
     final user = await _auth.currentUser();
@@ -36,12 +35,11 @@ class _UserProfileState extends State<UserProfile> {
     return FutureBuilder<User>(
         future: _getCurrentUser(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
+          if (snapshot.connectionState != ConnectionState.done) {
             return Center(
               child: CircularProgressIndicator(),
             );
-          }
-          if (snapshot.connectionState == ConnectionState.done) {
+          } else {
             return Column(
               children: [
                 ClipPath(
@@ -89,15 +87,17 @@ class _UserProfileState extends State<UserProfile> {
                       IconTextButton(
                         title: '設定',
                         icon: Icons.settings,
-                        onPressed: () {
-                          Navigator.push(
+                        onPressed: () async {
+                          await Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) {
-                                return Setting(snapshot.data);
+                                return Setting(
+                                    snapshot.data, _getCurrentUser());
                               },
                             ),
                           );
+                          setState(() {}); // reload
                         },
                       ),
                       IconTextButton(title: 'ヘルプ', icon: Icons.help),
