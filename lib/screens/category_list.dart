@@ -50,9 +50,7 @@ class GetLogs extends StatelessWidget {
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(
-            child: CircularProgressIndicator(
-              backgroundColor: Colors.blue,
-            ),
+            child: CircularProgressIndicator(),
           );
         }
         if (snapshot.connectionState == ConnectionState.done) {
