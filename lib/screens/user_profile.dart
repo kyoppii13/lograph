@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:lograph/common/rounded_button.dart';
-import 'package:lograph/common/icon_text_button.dart';
+import 'package:lograph/widgets/rounded_button.dart';
+import 'package:lograph/widgets/icon_text_button.dart';
 import 'package:lograph/screens/log_list.dart';
 
 class UserProfile extends StatefulWidget {

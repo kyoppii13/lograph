@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lograph/screens/log_list.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:lograph/common/constants.dart';
-import 'package:lograph/common/rounded_button.dart';
+import 'package:lograph/widgets/constants.dart';
+import 'package:lograph/widgets/rounded_button.dart';
 import 'package:lograph/screens/category_list.dart';
 import 'package:lograph/screens/signup.dart';
 

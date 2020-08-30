@@ -5,7 +5,7 @@ import 'package:lograph/screens/category_list.dart';
 import 'package:lograph/screens/log_input.dart';
 import 'package:lograph/screens/user_profile.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:lograph/common/list_item.dart';
+import 'package:lograph/widgets/list_item.dart';
 
 final _firestore = Firestore.instance;
 FirebaseUser loggedInUser;

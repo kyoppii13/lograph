@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:lograph/common/graph_item.dart';
+import 'package:lograph/widgets/graph_item.dart';
 
 final _firestore = Firestore.instance;
 FirebaseUser loggedInUser;
