@@ -65,6 +65,7 @@ class _UserProfileState extends State<UserProfile> {
                             ? CircleAvatar(
                                 backgroundImage:
                                     NetworkImage(snapshot.data.imageUrl),
+                                backgroundColor: Colors.white,
                                 radius: 40,
                               )
                             : CircleAvatar(
