@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:lograph/models/User.dart';
 import 'package:lograph/widgets/rounded_button.dart';
 import 'package:lograph/widgets/icon_text_button.dart';
 import 'package:lograph/screens/log_list.dart';
@@ -14,34 +15,22 @@ class UserProfile extends StatefulWidget {
 class _UserProfileState extends State<UserProfile> {
   final _auth = FirebaseAuth.instance;
   final _store = Firestore.instance;
-  String loggedInUser = '';
+  User loggedInUser;
+
+  void getCurrentUser() async {
+    final user = await _auth.currentUser();
+    final result = await _store.collection('users').document(user.uid).get();
+    final email = result.data['email'].toString();
+    final uid = result.data['uid'].toString();
+    setState(() {
+      loggedInUser = User(email, uid);
+    });
+  }
 
   @override
   void initState() {
-    super.initState();
     getCurrentUser();
-  }
-
-  void getCurrentUser() async {
-    _auth
-        .currentUser()
-        .then((currentUser) => {
-              _store
-                  .collection('users')
-                  .document(currentUser.uid)
-                  .get()
-                  .then((DocumentSnapshot result) => {
-                        setState(() {
-                          loggedInUser = result.data['email'];
-                        })
-                      })
-                  .catchError(
-                    (error) => print(error),
-                  )
-            })
-        .catchError(
-          (error) => print(error),
-        );
+    super.initState();
   }
 
   @override
@@ -74,7 +63,7 @@ class _UserProfileState extends State<UserProfile> {
                 ),
                 SizedBox(height: 12),
                 Text(
-                  loggedInUser,
+                  loggedInUser != null ? loggedInUser.email : '',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,

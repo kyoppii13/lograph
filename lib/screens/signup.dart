@@ -40,10 +40,10 @@ class _SignupState extends State<Signup> {
                       .document(currentUser.uid)
                       .get()
                       .then((DocumentSnapshot result) => {
-                            Navigator.pushReplacementNamed(
-                              context,
-                              LogList.id,
-                            ),
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LogList())),
                             setState(() {
                               isShowSpinner = false;
                             })

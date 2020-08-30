@@ -20,7 +20,7 @@ class Lograph extends StatelessWidget {
         Signin.id: (context) => Signin(),
         Signup.id: (context) => Signup(),
         CategoryList.id: (context) => CategoryList(),
-        LogList.id: (context) => LogList(),
+        // LogList.id: (context) => LogList(),
         UserProfile.id: (context) => UserProfile(),
         CategoryInput.id: (context) => CategoryInput(),
         LogInput.id: (context) => LogInput(),

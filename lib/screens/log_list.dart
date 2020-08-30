@@ -12,14 +12,14 @@ FirebaseUser loggedInUser;
 
 class LogList extends StatefulWidget {
   static const String id = 'log_list';
-  final String title = 'ログ一覧';
+
   @override
   _LogListState createState() => _LogListState();
 }
 
 class _LogListState extends State<LogList> {
   final _auth = FirebaseAuth.instance;
-  FloatingActionButton floatingActionButton;
+  Map<String, dynamic> currentUser;
 
   @override
   void initState() {
