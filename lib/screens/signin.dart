@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lograph/screens/log_list.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:lograph/widgets/constants.dart';
@@ -17,6 +18,7 @@ class Signin extends StatefulWidget {
 class _SigninState extends State<Signin> {
   final _auth = FirebaseAuth.instance;
   bool isShowSpinner = false;
+  bool isShowValidationMessage = false;
   String email;
   String password;
   final GlobalKey<FormState> _registerFormKey = GlobalKey<FormState>();
@@ -52,27 +54,40 @@ class _SigninState extends State<Signin> {
                   children: [
                     TextFormField(
                       keyboardType: TextInputType.emailAddress,
-                      textAlign: TextAlign.center,
+                      textAlign: TextAlign.left,
                       onChanged: (value) {
                         email = value;
                       },
                       validator: emailValidator,
-                      decoration: kTextFieldDecoration.copyWith(
-                          hintText: 'メールアドレスを入力してください'),
+                      style: TextStyle(fontSize: 14),
+                      decoration:
+                          kTextFieldDecoration.copyWith(hintText: 'メールアドレス'),
                     ),
                     SizedBox(
                       height: 8,
                     ),
                     TextFormField(
                       obscureText: true,
-                      textAlign: TextAlign.center,
+                      textAlign: TextAlign.left,
                       onChanged: (value) {
                         password = value;
                       },
                       validator: passwordValidator,
-                      decoration: kTextFieldDecoration.copyWith(
-                          hintText: 'パスワードを入力してください'),
-                    )
+                      style: TextStyle(fontSize: 14),
+                      decoration:
+                          kTextFieldDecoration.copyWith(hintText: 'パスワード'),
+                    ),
+                    Visibility(
+                      visible: isShowValidationMessage,
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Container(
+                          child: Text('メールアドレスまたはパスワードが間違っています',
+                              textAlign: TextAlign.left,
+                              style: TextStyle(color: Color(0xffd32f2f))),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -97,8 +112,14 @@ class _SigninState extends State<Signin> {
                       setState(() {
                         isShowSpinner = false;
                       });
-                    } catch (e) {
-                      print(e);
+                    } catch (error) {
+                      if (error is PlatformException &&
+                          error.code == 'ERROR_USER_NOT_FOUND') {
+                        setState(() {
+                          isShowValidationMessage = true;
+                          isShowSpinner = false;
+                        });
+                      }
                     }
                   }
                 },

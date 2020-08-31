@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lograph/widgets/constants.dart';
 import 'package:lograph/widgets/rounded_button.dart';
 import 'package:lograph/screens/log_list.dart';
@@ -19,6 +20,7 @@ class _SignupState extends State<Signup> {
   final GlobalKey<FormState> _registerFormKey = GlobalKey<FormState>();
 
   bool isShowSpinner = true;
+  bool isShowValidationMessage = false;
   String email;
   String password;
 
@@ -57,6 +59,11 @@ class _SignupState extends State<Signup> {
           (error) => print(error),
         );
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -100,26 +107,39 @@ class _SignupState extends State<Signup> {
                     children: [
                       TextFormField(
                         keyboardType: TextInputType.emailAddress,
-                        textAlign: TextAlign.center,
+                        textAlign: TextAlign.left,
                         onChanged: (value) {
                           email = value;
                         },
                         validator: emailValidator,
-                        decoration: kTextFieldDecoration.copyWith(
-                            hintText: 'メールアドレスを入力してください'),
+                        style: TextStyle(fontSize: 14),
+                        decoration:
+                            kTextFieldDecoration.copyWith(hintText: 'メールアドレス'),
+                      ),
+                      Visibility(
+                        visible: isShowValidationMessage,
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: Container(
+                            child: Text('登録済みのメールアドレスです',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(color: Color(0xffd32f2f))),
+                          ),
+                        ),
                       ),
                       SizedBox(
                         height: 12,
                       ),
                       TextFormField(
                         obscureText: true,
-                        textAlign: TextAlign.center,
+                        textAlign: TextAlign.left,
                         onChanged: (value) {
                           password = value;
                         },
                         validator: passwordValidator,
-                        decoration: kTextFieldDecoration.copyWith(
-                            hintText: 'パスワードを入力してください'),
+                        style: TextStyle(fontSize: 14),
+                        decoration:
+                            kTextFieldDecoration.copyWith(hintText: 'パスワード'),
                       ),
                     ],
                   ),
@@ -132,27 +152,37 @@ class _SignupState extends State<Signup> {
                       setState(() {
                         isShowSpinner = true;
                       });
-                      await _auth
-                          .createUserWithEmailAndPassword(
-                              email: email, password: password)
-                          .then((AuthResult currentUser) => _store
-                              .collection("users")
-                              .document(currentUser.user.uid)
-                              .setData({
-                                "uid": currentUser.user.uid,
-                                "email": email,
-                                "imageUrl": '',
-                                "createdAt": Timestamp.now(),
-                              })
-                              .then((result) => {
-                                    Navigator.pushReplacementNamed(
-                                        context, LogList.id),
-                                    setState(() {
-                                      isShowSpinner = false;
-                                    })
+                      try {
+                        AuthResult currentUser =
+                            await _auth.createUserWithEmailAndPassword(
+                                email: email, password: password);
+
+                        _store
+                            .collection("users")
+                            .document(currentUser.user.uid)
+                            .setData({
+                              "uid": currentUser.user.uid,
+                              "email": email,
+                              "imageUrl": '',
+                              "createdAt": Timestamp.now(),
+                            })
+                            .then((result) => {
+                                  Navigator.pushReplacementNamed(
+                                      context, LogList.id),
+                                  setState(() {
+                                    isShowSpinner = false;
                                   })
-                              .catchError((error) => print(error)))
-                          .catchError((error) => print(error));
+                                })
+                            .catchError((error) => print(error));
+                      } catch (error) {
+                        if (error is PlatformException &&
+                            error.code == 'ERROR_EMAIL_ALREADY_IN_USE') {
+                          setState(() {
+                            isShowValidationMessage = true;
+                            isShowSpinner = false;
+                          });
+                        }
+                      }
                     }
                   },
                 ),
