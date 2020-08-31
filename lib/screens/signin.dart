@@ -103,7 +103,7 @@ class _SigninState extends State<Signin> {
                       final user = await _auth.signInWithEmailAndPassword(
                           email: email, password: password);
                       if (user != null) {
-                        Navigator.pushAndRemoveUntil(
+                        Navigator.pushAndRemoveUntil<LogList>(
                           context,
                           MaterialPageRoute(builder: (context) => LogList()),
                           (_) => false,

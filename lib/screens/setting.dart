@@ -39,7 +39,7 @@ class _SettingState extends State<Setting> {
     StorageTaskSnapshot snapshot =
         await _storage.ref().child("profiles/$uid").putFile(_image).onComplete;
 
-    final String downloadUrl = await snapshot.ref.getDownloadURL();
+    final String downloadUrl = await snapshot.ref.getDownloadURL().toString();
     return downloadUrl;
   }
 

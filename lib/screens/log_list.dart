@@ -8,7 +8,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:lograph/widgets/list_item.dart';
 
 final _firestore = Firestore.instance;
-FirebaseUser loggedInUser;
+final _auth = FirebaseAuth.instance;
 
 class LogList extends StatefulWidget {
   static const String id = 'log_list';
@@ -18,18 +18,15 @@ class LogList extends StatefulWidget {
 }
 
 class _LogListState extends State<LogList> {
-  final _auth = FirebaseAuth.instance;
-  Map<String, dynamic> currentUser;
-
   @override
   void initState() {
     super.initState();
   }
 
-  int _selectedIndex = 1;
+  int _selectedIndex = 0;
   String _title = 'ログ一覧';
   static List<Widget> _screenList = [
-    LogListBody(),
+    LogTile(),
     CategoryList(),
     UserProfile(),
   ];
@@ -68,7 +65,7 @@ class _LogListState extends State<LogList> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(
+              MaterialPageRoute<LogInput>(
                   builder: (context) {
                     return LogInput();
                   },
@@ -81,45 +78,62 @@ class _LogListState extends State<LogList> {
   }
 }
 
-class LogListBody extends StatelessWidget {
+class LogTile extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: GetLogs(),
-    );
-  }
+  _LogTileState createState() => _LogTileState();
 }
 
-class GetLogs extends StatelessWidget {
+class _LogTileState extends State<LogTile> {
+  Future getLogs() async {
+    final currentUser = await _auth.currentUser();
+    QuerySnapshot logsQuery = await _firestore
+        .collection('users')
+        .document(currentUser.uid)
+        .collection('logs')
+        .getDocuments();
+    return logsQuery.documents;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _firestore.collection('logs').document('Test').get(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        if (snapshot.connectionState == ConnectionState.done) {
-          return ListView.builder(
-            padding: EdgeInsets.all(10),
-            itemBuilder: (BuildContext context, int index) {
-              if (index < 10) {
+    Map<String, dynamic> category;
+    @override
+    void initState() {
+      super.initState();
+    }
+
+    return SafeArea(
+      child: FutureBuilder<dynamic>(
+        future: getLogs(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (snapshot.connectionState == ConnectionState.done) {
+            return ListView.builder(
+              padding: EdgeInsets.all(10),
+              itemCount: snapshot.data.length,
+              itemBuilder: (BuildContext context, int index) {
+                final log = snapshot.data[index].data;
+
                 return ListItem(
-                  date: DateTime.now(),
-                  value: '50kg',
-                  category: '体重',
-                  icon: Icon(
-                    MdiIcons.armFlexOutline,
-                    size: 36,
-                  ),
+                  date: log['createdAt'].toDate(),
+                  value: log['value'].toString(),
+                  category: log['category']['name'].toString(),
+                  unit: log['category']['unit'].toString(),
+                  // icon: Icon(
+                  //   MdiIcons.armFlexOutline,
+                  //   size: 36,
+                  // ),
                 );
-              }
-            },
-          );
-        }
-      },
+              },
+            );
+          }
+          return Container();
+        },
+      ),
     );
   }
 }

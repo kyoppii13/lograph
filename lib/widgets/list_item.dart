@@ -3,12 +3,13 @@ import 'package:lograph/screens/log_detail.dart';
 import 'package:intl/intl.dart';
 
 class ListItem extends StatelessWidget {
-  ListItem({this.date, this.value, this.category, this.icon});
+  ListItem({this.date, this.value, this.category, this.icon, this.unit});
 
   final DateTime date;
   final String value;
   final String category;
   final Icon icon;
+  final String unit;
   @override
   Widget build(BuildContext context) {
     var formatter = DateFormat('y/MM/dd HH:mm');
@@ -20,7 +21,7 @@ class ListItem extends StatelessWidget {
       child: ListTile(
         title: Text(formatter.format(date)),
         subtitle: Text(
-          '$category $value',
+          '$category $value $unit',
           style: TextStyle(fontSize: 18),
         ),
         leading: icon,
