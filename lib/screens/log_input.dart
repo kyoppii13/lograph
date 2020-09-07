@@ -5,6 +5,7 @@ import 'package:lograph/widgets/rounded_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 final _firestore = Firestore.instance;
 final _auth = FirebaseAuth.instance;
@@ -22,6 +23,8 @@ class _LogInputState extends State<LogInput> {
   FirebaseUser _currentUser;
   final _store = Firestore.instance;
   bool isShowSpinner = false;
+  String _category;
+  String _value;
 
   Future uploadLog() async {
     final currentUser = await _auth.currentUser();
@@ -60,7 +63,7 @@ class _LogInputState extends State<LogInput> {
                     );
                   }).toList(),
                   onChanged: (String value) {
-                    setState(() {});
+                    _category = value;
                   },
                 ),
                 SizedBox(
@@ -72,6 +75,9 @@ class _LogInputState extends State<LogInput> {
                       child: TextFormField(
                         decoration:
                             kTextFieldDecoration.copyWith(hintText: '値'),
+                        onChanged: (value) {
+                          _value = value;
+                        },
                       ),
                     ),
                     Text(
@@ -83,9 +89,39 @@ class _LogInputState extends State<LogInput> {
                 SizedBox(
                   height: 20,
                 ),
-                Text(
-                  formatter.format(_datetime),
-                  style: TextStyle(fontSize: 18),
+                InkWell(
+                  onTap: () {
+                    DatePicker.showDateTimePicker(context,
+                        showTitleActions: true,
+                        onChanged: (date) {}, onConfirm: (date) {
+                      setState(() {
+                        _datetime = date;
+                      });
+                    }, currentTime: _datetime, locale: LocaleType.jp);
+                  },
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 40,
+                    child: Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(),
+                          Text(
+                            formatter.format(_datetime).toString(),
+                            style: TextStyle(fontSize: 18),
+                          ),
+                          Icon(Icons.arrow_drop_down),
+                        ],
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.blueAccent, width: 1),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(32),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
                 RoundedButton(
                   title: '登録',
